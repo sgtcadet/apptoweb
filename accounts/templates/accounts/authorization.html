@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Auth View</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<style>
+    input[type="submit"]{
+        cursor:pointer;
+    }
+</style>
+<body>
+    <h1>Authorization</h1>
+    <p>for: {{user.firstname}}</p>
+    <p>Expected Auth_Number: {{user.auth_number}}</p>
+
+    <form id="authorization_form" method="post">
+        {% csrf_token %}
+        {{form}}
+        <!--
+        <label for="a_number">Authorization Number:</label>
+        <input id="a_number" name="auth_number" type="text">
+
+        <input type="hidden" name="email" value="{{user.email}}">
+        -->
+        <input type="submit" id="authorize" value="Next">
+    </form>
+    <script>
+        $(document).on('submit','#authorization_form', function(event){
+            console.log('inside form submit')
+            event.preventDefault();
+            alert("Form script triggered");
+            console.log("form default prevented...");
+            console.log("above ajax block");
+            $.ajax({
+                console.log('inside ajax snippet');
+                url: "{% url 'accounts:authorization' %}",
+                dataType: "json",
+                method: "POST",
+                data:{auth_number: auth_number,email:email},
+                success:function(data){
+                    return data;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
